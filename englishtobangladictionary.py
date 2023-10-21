@@ -93,8 +93,10 @@ styles = """
 table_html = styles + df.to_html(index=False)
 
 if html_file_path and len(words) > 0:
-    with open(html_file_path, 'w', encoding='utf-8') as file:
-        file.write(html.unescape(table_html))
-    st.success(f"Updated HTML file: {html_file_path}")
-elif len(words) > 0:
-    st.warning("No HTML file path provided. Please specify a file path to save the results.")
+    try:
+        with open(html_file_path, 'w', encoding='utf-8') as file:
+            file.write(html.unescape(table_html))
+        st.success(f"Updated HTML file: {html_file_path}")
+    except FileNotFoundError:
+        st.error(f"Error: Could not open the file for writing.")
+        st.error(f"Please check if the directory and file path are correct.")
